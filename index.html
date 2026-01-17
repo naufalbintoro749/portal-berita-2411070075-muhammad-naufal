@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        /* Gaya Khusus ala Tribun */
+        .tribun-logo {
+            font-family: 'Times New Roman', serif; /* Font klasik berita */
+            color: #0d6efd; /* Biru Tribun */
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+        .search-rounded {
+            border-radius: 50px; /* Biar lonjong */
+            padding-left: 20px;
+        }
+        .nav-link-secondary {
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .nav-link-secondary:hover {
+            color: #0d6efd;
+        }
+        .news-img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .footer-link {
+        color: #b0b0b0; /* Abu-abu muda */
+        text-decoration: none;
+        margin-bottom: 10px;
+        display: block;
+        transition: 0.3s;
+        }
+        .footer-link:hover {
+        color: #fff; /* Putih saat hover */
+        padding-left: 5px; /* Efek geser sedikit */
+        }
+    </style>
+</head>
+<!-- <body class="bg-light"> -->
+
+<body class="bg-white">
+
+<header class="py-3 border-bottom">
+    <div class="container">
+        <div class="row align-items-center">
+            
+            <div class="col-md-3 d-flex flex-column">
+                <a href="index.html" class="text-decoration-none">
+                    <h1 class="h2 tribun-logo m-0">Portal Berita<span class="text-danger">.com</span></h1>
+                </a>
+                <small class="text-muted" id="tanggalHariIni" style="font-size: 0.75rem;">Loading tanggal...</small>
+            </div>
+
+            <div class="col-md-5 my-2 my-md-0">
+                <div class="input-group">
+                    <input type="text" id="inputCari" class="form-control search-rounded border-end-0" placeholder="Cari Berita...">
+                    <button class="btn btn-outline-secondary border-start-0 search-rounded" style="border-radius: 0 50px 50px 0;" onclick="cariBerita()">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-4 d-flex justify-content-end align-items-center gap-3 d-none d-md-flex">
+                <div class="social-icons text-muted">
+                    <i class="bi bi-youtube fs-5 mx-1"></i>
+                    <i class="bi bi-facebook fs-5 mx-1"></i>
+                    <i class="bi bi-instagram fs-5 mx-1"></i>
+                    <i class="bi bi-twitter-x fs-5 mx-1"></i>
+                    <i class="bi bi-tiktok fs-5 mx-1"></i>
+                </div>
+                <button class="btn btn-outline-dark btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                    + Tulis Berita
+                </button>
+                <i class="bi bi-person-circle fs-4 text-secondary"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar navbar-expand-lg bg-light shadow-sm py-1 sticky-top">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+    <ul class="navbar-nav gap-3">
+        <li class="nav-item"><a class="nav-link nav-link-secondary fw-bold text-danger" href="#" onclick="gantiKategori('')">SEMUA</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-secondary" href="#" onclick="gantiKategori('News')">NEWS</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-secondary" href="#" onclick="gantiKategori('Bisnis')">BISNIS</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-secondary" href="#" onclick="gantiKategori('Sport')">SPORT</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-secondary" href="#" onclick="gantiKategori('Seleb')">SELEB</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-secondary" href="#" onclick="gantiKategori('Tekno')">TEKNO</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-secondary" href="#" onclick="gantiKategori('Otomotif')">OTOMOTIF</a></li>
+    </ul>
+</div>
+    </div>
+</nav>
+
+<div class="container mt-3 mb-3 d-none d-md-block">
+    <div id="bannerCarousel" class="carousel slide shadow rounded overflow-hidden" data-bs-ride="carousel">
+        
+        <div class="carousel-indicators" id="bannerIndicators">
+            </div>
+
+        <div class="carousel-inner" id="bannerIsi">
+            <div class="text-center p-5 bg-light">Sedang memuat highlight...</div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <h5 class="fw-bold border-bottom pb-2 mb-3">
+    <span class="border-bottom border-3 border-danger pb-2" id="judulSection">BERITA TERBARU</span>
+    </h5>
+    
+    <div class="row" id="listBerita">
+        <p class="text-center">Loading...</p>
+    </div>
+</div>
+<!-- <div class="row mb-4 mt-3">
+    <div class="col-md-6 mx-auto">
+        <div class="input-group">
+            <input type="text" id="inputCari" class="form-control" placeholder="Cari berita apa hari ini?">
+            <button class="btn btn-danger" onclick="cariBerita()">Cari</button>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="row" id="listBerita">
+        <div class="col-12 text-center">Loading...</div>
+    </div>
+</div> -->
+
+<div class="modal fade" id="modalTambah" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tulis Berita Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formBerita">
+                    <div class="mb-3">
+                        <label>Judul Berita</label>
+                        <input type="text" id="judul" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Gambar Utama</label>
+                        <input type="file" id="gambar" class="form-control" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Isi Berita</label>
+                        <textarea id="isi" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100">Terbitkan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // 1. Script Tanggal Otomatis (Format Indonesia)
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const tanggalSekarang = new Date().toLocaleDateString('id-ID', options);
+    document.getElementById('tanggalHariIni').innerText = tanggalSekarang;
+
+    // 2. Script Tombol Enter di Search
+    // Agar pas ngetik di kolom search baru terus enter, dia langsung nyari
+    document.getElementById('inputCari').addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            cariBerita();
+        }
+    });
+
+    const API_URL = 'api.php';
+
+    // --- UPDATE JAVASCRIPT ---
+
+// Fungsi Load News sekarang terima 2 parameter: keyword & kategori
+async function loadNews(keyword = '', kategori = '') {
+    try {
+        let url = API_URL;
+
+        // Logika menyusun URL
+        if (kategori) {
+            // Jika ada kategori: api.php?kategori=Tekno
+            url = `${API_URL}?kategori=${kategori}`;
+            // Ubah judul section biar keren
+            document.getElementById('judulSection').innerText = 'KATEGORI: ' + kategori.toUpperCase();
+        } 
+        else if (keyword) {
+            // Jika ada pencarian: api.php?cari=mobil
+            url = `${API_URL}?cari=${keyword}`;
+            document.getElementById('judulSection').innerText = 'HASIL PENCARIAN: ' + keyword;
+        }
+        else {
+            // Default
+            document.getElementById('judulSection').innerText = 'BERITA TERBARU';
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // ... (Sisa kode rendering HTML ke bawah SAMA PERSIS seperti sebelumnya) ...
+        // Copy paste bagian loop forEach data dan innerHTML di sini
+        
+        if (data.length === 0) {
+            document.getElementById('listBerita').innerHTML = '<div class="text-center p-5">Belum ada berita di kategori ini.</div>';
+            return;
+        }
+
+        let html = '';
+        data.forEach(item => {
+             // ... paste kode HTML Card di sini ...
+             html += `
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="${item.gambar_url}" class="card-img-top news-img" alt="Gambar">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">${item.kategori || 'News'}</span>
+                            <h5 class="card-title fw-bold">${item.judul}</h5>
+                            <small class="text-muted">${item.tanggal}</small>
+                            <p class="card-text news-content mt-2">${item.isi.substring(0, 100)}...</p>
+                            <a href="detail.html?id=${item.id}" class="btn btn-outline-danger btn-sm mt-2">Baca Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        document.getElementById('listBerita').innerHTML = html;
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Fungsi Perantara saat tombol menu diklik
+function gantiKategori(kategori) {
+    // Panggil loadNews dengan parameter kategori
+    loadNews('', kategori);
+}
+
+    // 2. POST: Upload Berita dengan FormData
+    document.getElementById('formBerita').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Gunakan FormData untuk menangani File Upload
+        const formData = new FormData();
+        formData.append('judul', document.getElementById('judul').value);
+        formData.append('isi', document.getElementById('isi').value);
+        formData.append('gambar', document.getElementById('gambar').files[0]);
+
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: formData // Tidak perlu header Content-Type, browser otomatis set Multipart
+        });
+
+        const result = await response.json();
+        alert(result.message);
+        
+        // Tutup modal dan refresh data
+        location.reload(); 
+    });
+
+    // Jalankan saat pertama kali
+    loadNews();
+
+    // --- FUNGSI UNTUK BANNER SLIDESHOW ---
+async function loadBanner() {
+    try {
+        const response = await fetch(API_URL); // Panggil API
+        const data = await response.json();
+
+        // 1. Ambil 3 Berita Teratas saja untuk dijadikan Banner
+        // Kita pakai .slice(0, 3)
+        const beritaTerbaru = data.slice(0, 3);
+        
+        let htmlIsi = '';
+        let htmlIndikator = '';
+
+        beritaTerbaru.forEach((item, index) => {
+            // Tentukan item pertama sebagai 'active' (wajib di Bootstrap)
+            const activeClass = index === 0 ? 'active' : '';
+
+            // Buat HTML Indikator (Garis kecil di bawah)
+            htmlIndikator += `
+                <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="${index}" class="${activeClass}"></button>
+            `;
+
+            // Buat HTML Gambar & Judul
+            htmlIsi += `
+                <div class="carousel-item ${activeClass}" data-bs-interval="4000">
+                    <a href="detail.html?id=${item.id}">
+                        <img src="${item.gambar_url}" class="d-block w-100" alt="${item.judul}" 
+                             style="height: 400px; object-fit: cover; filter: brightness(0.7);">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h3 class="fw-bold">${item.judul}</h3>
+                            <p>${item.isi.substring(0, 80)}...</p>
+                        </div>
+                    </a>
+                </div>
+            `;
+        });
+
+        // Masukkan ke layar
+        document.getElementById('bannerIndicators').innerHTML = htmlIndikator;
+        document.getElementById('bannerIsi').innerHTML = htmlIsi;
+
+    } catch (error) {
+        console.error("Gagal memuat banner:", error);
+    }
+}
+
+// PENTING: Panggil fungsi ini saat halaman dibuka
+loadBanner();
+</script>
+
+<footer class="bg-dark text-white pt-5 mt-5 border-top border-4 border-danger">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-md-4 mb-4">
+                <h4 class="tribun-logo text-white mb-3">PortalBerita<span class="text-danger">.com</span></h4>
+                <p class="text-secondary small">
+                    Portal berita terkini dan terpercaya. Menyajikan informasi aktual dari nasional hingga internasional dengan akurasi dan kecepatan.
+                </p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-white fs-5"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <h6 class="fw-bold text-uppercase mb-3 text-danger">Kategori Berita</h6>
+                <a href="#" onclick="gantiKategori('News')" class="footer-link">News & Nasional</a>
+                <a href="#" onclick="gantiKategori('Bisnis')" class="footer-link">Ekonomi & Bisnis</a>
+                <a href="#" onclick="gantiKategori('Sport')" class="footer-link">Olahraga & Bola</a>
+                <a href="#" onclick="gantiKategori('Tekno')" class="footer-link">Teknologi & Gadget</a>
+                <a href="#" onclick="gantiKategori('Seleb')" class="footer-link">Selebritis</a>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <h6 class="fw-bold text-uppercase mb-3 text-danger">Tentang Kami</h6>
+                <a href="#" class="footer-link">Redaksi</a>
+                <a href="#" class="footer-link">Pedoman Media Siber</a>
+                <a href="#" class="footer-link">Karir / Lowongan</a>
+                <a href="#" class="footer-link">Info Iklan</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+            </div>
+
+            <div class="col-md-2 mb-4">
+                <h6 class="fw-bold text-uppercase mb-3 text-danger">Kantor Pusat</h6>
+                <p class="text-secondary small">
+                    <i class="bi bi-geo-alt me-2"></i> Gedung STIKOM EL RAHMA BOGOR Lt. 3<br>
+                    Jl. Dr. Semeru No. 1<br>
+                    Kota Bogor, 16210
+                </p>
+                <p class="text-secondary small">
+                    <i class="bi bi-envelope me-2"></i> redaksi@portalberita.com<br>
+                    <i class="bi bi-telephone me-2"></i> (021) 345-0199
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bg-black py-3 mt-4">
+        <div class="container text-center">
+            <small class="text-secondary">
+                &copy; <span id="tahunFooter"></span> <b>PortalBerita Network</b>. All Rights Reserved.
+            </small>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
